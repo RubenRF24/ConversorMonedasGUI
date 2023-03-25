@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
  * @author ASUS VIVOBOOK
  */
 public class VentanaMenuPrincipal extends javax.swing.JFrame {
-    
+
     private DefaultComboBoxModel<Monedas> modelo = new DefaultComboBoxModel();
     private DefaultComboBoxModel<Monedas> modelo1 = new DefaultComboBoxModel();
     private ApiCambioDivisas divisas;
@@ -31,7 +33,7 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         TextPrompt texto = new TextPrompt("0.00", fieldMonto);
         divisas = new ApiCambioDivisas(obtenerAbreviacion(comboMonedaFrom), obtenerAbreviacion(comboMonedaTo));
     }
-    
+
     public void llenarComboBox() {
         añadirElementos(new Monedas("USD", "Estados Unidos"));
         añadirElementos(new Monedas("EUR", "Europa"));
@@ -41,12 +43,12 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         añadirElementos(new Monedas("PEN", "Peru"));
 
     }
-    
+
     public void añadirElementos(Monedas moneda) {
         modelo.addElement(moneda);
         modelo1.addElement(moneda);
     }
-    
+
     public void obtenerConversion() {
         if (!fieldMonto.getText().isEmpty())
         {
@@ -59,13 +61,13 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
                 mensajeError();
             }
         }
-        
+
     }
-    
-    public String obtenerAbreviacion(JComboBox<Monedas> comboMoneda){
+
+    public String obtenerAbreviacion(JComboBox<Monedas> comboMoneda) {
         return ((Monedas) comboMoneda.getSelectedItem()).getAbreviacion();
     }
-   
+
     public void mensajeError() {
         JOptionPane.showMessageDialog(null, "Solo se aceptan numeros", "Error", JOptionPane.ERROR_MESSAGE, null);
     }
@@ -303,33 +305,22 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
         try
         {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
+            UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
         } catch (ClassNotFoundException ex)
         {
-            java.util.logging.Logger.getLogger(VentanaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex)
         {
-            java.util.logging.Logger.getLogger(VentanaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            // Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex)
         {
-            java.util.logging.Logger.getLogger(VentanaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+            //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex)
         {
-            java.util.logging.Logger.getLogger(VentanaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
