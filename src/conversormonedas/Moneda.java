@@ -1,13 +1,11 @@
-
 package conversormonedas;
 
-
-public class Monedas {
+public class Moneda {
 
     private String abreviacion;
     private String pais;
 
-    public Monedas(String abreviacion, String pais) {
+    public Moneda(String abreviacion, String pais) {
         this.abreviacion = abreviacion;
         this.pais = pais;
     }
@@ -24,6 +22,5 @@ public class Monedas {
     public String toString() {
         return abreviacion + " - " + pais;
     }
-    
-    
+
 }

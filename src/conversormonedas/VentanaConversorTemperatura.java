@@ -5,69 +5,62 @@
 package conversormonedas;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
  * @author ASUS VIVOBOOK
  */
-public class VentanaMenuPrincipal extends javax.swing.JFrame {
-
-    private DefaultComboBoxModel<Monedas> modelo = new DefaultComboBoxModel();
-    private DefaultComboBoxModel<Monedas> modelo1 = new DefaultComboBoxModel();
-    private ApiCambioDivisas divisas;
+public class VentanaConversorTemperatura extends javax.swing.JFrame {
+    
+    private DefaultComboBoxModel<Temperatura> modelo = new DefaultComboBoxModel();
+    private DefaultComboBoxModel<Temperatura> modelo1 = new DefaultComboBoxModel();
     private DecimalFormat formato = new DecimalFormat("#.##");
+    private Conversor temperatura;
 
     /**
-     * Creates new form VentanaMenuPrincipal
+     * Creates new form VentanaConversorTemperatura
      */
-    public VentanaMenuPrincipal() {
+    public VentanaConversorTemperatura() {
         llenarComboBox();
         initComponents();
+        setVisible(true);
         setLocationRelativeTo(null);
-        TextPrompt texto = new TextPrompt("0.00", fieldMonto);
-        divisas = new ApiCambioDivisas(obtenerAbreviacion(comboMonedaFrom), obtenerAbreviacion(comboMonedaTo));
+        temperatura = new Conversor(obtenerAbreviacion(comboTemperaturaFrom), obtenerAbreviacion(comboTemperaturaTo), 0);
     }
-
+    
     public void llenarComboBox() {
-        añadirElementos(new Monedas("USD", "Estados Unidos"));
-        añadirElementos(new Monedas("EUR", "Europa"));
-        añadirElementos(new Monedas("COP", "Colombia"));
-        añadirElementos(new Monedas("CLP", "Chile"));
-        añadirElementos(new Monedas("ARS", "Argentina"));
-        añadirElementos(new Monedas("PEN", "Peru"));
-
+        añadirElementos(new Temperatura("Celsius", "°C"));
+        añadirElementos(new Temperatura("Fahrenheit", "°F"));
+        añadirElementos(new Temperatura("Kelvin", "K"));
+        añadirElementos(new Temperatura("Rankine", "°R"));
     }
-
-    public void añadirElementos(Monedas moneda) {
-        modelo.addElement(moneda);
-        modelo1.addElement(moneda);
+    
+    public void añadirElementos(Temperatura temperatura) {
+        modelo.addElement(temperatura);
+        modelo1.addElement(temperatura);
     }
-
-    public void obtenerConversion() {
+    
+    public void obtenerTemperatura() {
         if (!fieldMonto.getText().isEmpty())
         {
             try
             {
-                String resultado = formato.format(divisas.getValor() * Double.parseDouble(fieldMonto.getText()));
+                String resultado = formato.format(temperatura.obtenerTemperatura(Double.parseDouble(fieldMonto.getText())));
                 fieldResultado.setText(String.valueOf(resultado));
             } catch (NumberFormatException ex)
             {
                 mensajeError();
             }
         }
-
     }
-
-    public String obtenerAbreviacion(JComboBox<Monedas> comboMoneda) {
-        return ((Monedas) comboMoneda.getSelectedItem()).getAbreviacion();
+    
+    public String obtenerAbreviacion(JComboBox<Temperatura> comboBox) {
+        return ((Temperatura) comboBox.getSelectedItem()).getAbreviatura();
     }
-
+    
     public void mensajeError() {
         JOptionPane.showMessageDialog(null, "Solo se aceptan numeros", "Error", JOptionPane.ERROR_MESSAGE, null);
     }
@@ -82,14 +75,13 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jComboBox1 = new javax.swing.JComboBox<>();
         panel = new javax.swing.JPanel();
         labelTitulo = new javax.swing.JLabel();
         labelCantidad = new javax.swing.JLabel();
         fieldMonto = new javax.swing.JTextField();
         labelTipoCambio = new javax.swing.JLabel();
-        comboMonedaFrom = new javax.swing.JComboBox<>();
-        comboMonedaTo = new javax.swing.JComboBox<>();
+        comboTemperaturaFrom = new javax.swing.JComboBox<>();
+        comboTemperaturaTo = new javax.swing.JComboBox<>();
         labelResultado = new javax.swing.JLabel();
         fieldResultado = new javax.swing.JTextField();
         labelFrom = new javax.swing.JLabel();
@@ -100,15 +92,13 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         itemTemperaturas = new javax.swing.JMenuItem();
         itemCerrar = new javax.swing.JMenuItem();
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         panel.setLayout(new java.awt.GridBagLayout());
 
         labelTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         labelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelTitulo.setText("CONVERSOR DE DIVISAS");
+        labelTitulo.setText("CONVERSOR DE TEMPERATURA");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -162,11 +152,11 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(9, 10, 10, 10);
         panel.add(labelTipoCambio, gridBagConstraints);
 
-        comboMonedaFrom.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboMonedaFrom.setModel(modelo);
-        comboMonedaFrom.addActionListener(new java.awt.event.ActionListener() {
+        comboTemperaturaFrom.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboTemperaturaFrom.setModel(modelo);
+        comboTemperaturaFrom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboMonedaFromActionPerformed(evt);
+                comboTemperaturaFromActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -176,13 +166,13 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 40, 10, 130);
-        panel.add(comboMonedaFrom, gridBagConstraints);
+        panel.add(comboTemperaturaFrom, gridBagConstraints);
 
-        comboMonedaTo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboMonedaTo.setModel(modelo1);
-        comboMonedaTo.addActionListener(new java.awt.event.ActionListener() {
+        comboTemperaturaTo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboTemperaturaTo.setModel(modelo1);
+        comboTemperaturaTo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboMonedaToActionPerformed(evt);
+                comboTemperaturaToActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -192,7 +182,7 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 40, 10, 130);
-        panel.add(comboMonedaTo, gridBagConstraints);
+        panel.add(comboTemperaturaTo, gridBagConstraints);
 
         labelResultado.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         labelResultado.setText("Resultado:");
@@ -248,11 +238,21 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         itemDivisas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         itemDivisas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cambio-de-divisas.png"))); // NOI18N
         itemDivisas.setText("Conversor de divisas");
+        itemDivisas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemDivisasActionPerformed(evt);
+            }
+        });
         menu.add(itemDivisas);
 
         itemTemperaturas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         itemTemperaturas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/temperatura.png"))); // NOI18N
         itemTemperaturas.setText("Conversor de temperaturas");
+        itemTemperaturas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemTemperaturasActionPerformed(evt);
+            }
+        });
         menu.add(itemTemperaturas);
 
         itemCerrar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -277,70 +277,89 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void itemTemperaturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemTemperaturasActionPerformed
+
+    }//GEN-LAST:event_itemTemperaturasActionPerformed
 
     private void itemCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCerrarActionPerformed
         System.exit(0);
     }//GEN-LAST:event_itemCerrarActionPerformed
 
     private void fieldMontoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldMontoKeyReleased
-        obtenerConversion();
+        obtenerTemperatura();
     }//GEN-LAST:event_fieldMontoKeyReleased
 
-    private void comboMonedaFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMonedaFromActionPerformed
-        divisas.setMonedaFrom(obtenerAbreviacion(comboMonedaFrom));
-        obtenerConversion();
-    }//GEN-LAST:event_comboMonedaFromActionPerformed
+    private void comboTemperaturaFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTemperaturaFromActionPerformed
+        temperatura.setTipoFrom(obtenerAbreviacion(comboTemperaturaFrom));
+        obtenerTemperatura();
+    }//GEN-LAST:event_comboTemperaturaFromActionPerformed
 
-    private void comboMonedaToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMonedaToActionPerformed
-        divisas.setMonedaTo(obtenerAbreviacion(comboMonedaTo));
-        obtenerConversion();
-    }//GEN-LAST:event_comboMonedaToActionPerformed
+    private void comboTemperaturaToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTemperaturaToActionPerformed
+        temperatura.setTipoTo(obtenerAbreviacion(comboTemperaturaTo));
+        obtenerTemperatura();
+    }//GEN-LAST:event_comboTemperaturaToActionPerformed
+
+    private void itemDivisasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemDivisasActionPerformed
+        dispose();
+        VentanaConversorDivisas vd = new VentanaConversorDivisas();
+    }//GEN-LAST:event_itemDivisasActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
         try
         {
-            UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
         } catch (ClassNotFoundException ex)
         {
-            //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaConversorTemperatura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex)
         {
-            // Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaConversorTemperatura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex)
         {
-            //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex)
+            java.util.logging.Logger.getLogger(VentanaConversorTemperatura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
-            //Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaConversorTemperatura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaMenuPrincipal().setVisible(true);
+                new VentanaConversorTemperatura().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<Monedas> comboMonedaFrom;
-    private javax.swing.JComboBox<Monedas> comboMonedaTo;
+    private javax.swing.JComboBox<Temperatura> comboTemperaturaFrom;
+    private javax.swing.JComboBox<Temperatura> comboTemperaturaTo;
     private javax.swing.JTextField fieldMonto;
     private javax.swing.JTextField fieldResultado;
     private javax.swing.JMenuItem itemCerrar;
     private javax.swing.JMenuItem itemDivisas;
     private javax.swing.JMenuItem itemTemperaturas;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel labelCantidad;
     private javax.swing.JLabel labelFrom;
