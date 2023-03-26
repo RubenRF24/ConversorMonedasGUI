@@ -31,7 +31,7 @@ public class VentanaConversorDivisas extends javax.swing.JFrame {
         initComponents();
         setVisible(true);
         setLocationRelativeTo(null);
-        TextPrompt texto = new TextPrompt("0.00", fieldMonto);
+        TextPrompt textoPlaceholder = new TextPrompt("0.00", fieldMonto);
         divisas = new Conversor(obtenerAbreviacion(comboMonedaFrom), obtenerAbreviacion(comboMonedaTo));
     }
 
@@ -61,6 +61,9 @@ public class VentanaConversorDivisas extends javax.swing.JFrame {
             {
                 mensajeError();
             }
+        } else
+        {
+            fieldResultado.setText("");
         }
 
     }
@@ -207,6 +210,7 @@ public class VentanaConversorDivisas extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(9, 10, 10, 10);
         panel.add(labelResultado, gridBagConstraints);
 
+        fieldResultado.setEditable(false);
         fieldResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fieldResultado.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -346,8 +350,8 @@ public class VentanaConversorDivisas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<Moneda> comboMonedaFrom;
-    private javax.swing.JComboBox<Moneda> comboMonedaTo;
+    private javax.swing.JComboBox<conversormonedas.Moneda> comboMonedaFrom;
+    private javax.swing.JComboBox<conversormonedas.Moneda> comboMonedaTo;
     private javax.swing.JTextField fieldMonto;
     private javax.swing.JTextField fieldResultado;
     private javax.swing.JMenuItem itemCerrar;

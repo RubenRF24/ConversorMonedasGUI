@@ -28,6 +28,7 @@ public class VentanaConversorTemperatura extends javax.swing.JFrame {
         initComponents();
         setVisible(true);
         setLocationRelativeTo(null);
+        TextPrompt textoPlaceholder = new TextPrompt("0.00", fieldMonto);
         temperatura = new Conversor(obtenerAbreviacion(comboTemperaturaFrom), obtenerAbreviacion(comboTemperaturaTo), 0);
     }
     
@@ -54,6 +55,8 @@ public class VentanaConversorTemperatura extends javax.swing.JFrame {
             {
                 mensajeError();
             }
+        } else{
+            fieldResultado.setText("");
         }
     }
     
@@ -196,6 +199,7 @@ public class VentanaConversorTemperatura extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(9, 10, 10, 10);
         panel.add(labelResultado, gridBagConstraints);
 
+        fieldResultado.setEditable(false);
         fieldResultado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fieldResultado.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
